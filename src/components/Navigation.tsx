@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Home, MapPin, Mountain, Waves, Building, LayoutDashboard, Compass, User, LogOut } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
+import { Menu, X, Home, MapPin, Mountain, Waves, Building, LayoutDashboard, Compass } from "lucide-react";
 
 const navItems = [
   { path: "/", label: "Home", icon: Home },
@@ -17,7 +16,6 @@ const navItems = [
 export const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectorStyle, setSelectorStyle] = useState({ width: 0, left: 0 });
-  const { user, isAuthenticated, logout } = useAuth();
   const location = useLocation();
   const navRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<{ [key: number]: HTMLElement }>({});
@@ -251,33 +249,6 @@ export const Navigation = () => {
                 </Link>
               );
             })}
-            
-            {/* User Menu */}
-            <div className="ml-4 flex items-center space-x-2">
-              {isAuthenticated ? (
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-muted-foreground">
-                    Welcome, {user?.name}
-                  </span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={logout}
-                    className="flex items-center space-x-1"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    <span>Logout</span>
-                  </Button>
-                </div>
-              ) : (
-                <Link to="/login">
-                  <Button variant="outline" size="sm" className="flex items-center space-x-1">
-                    <User className="w-4 h-4" />
-                    <span>Login</span>
-                  </Button>
-                </Link>
-              )}
-            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -312,36 +283,6 @@ export const Navigation = () => {
                   </Link>
                 );
               })}
-              
-              {/* Mobile User Menu */}
-              <div className="border-t pt-4 mt-4">
-                {isAuthenticated ? (
-                  <div className="space-y-2">
-                    <div className="px-4 py-2 text-sm text-muted-foreground">
-                      Welcome, {user?.name}
-                    </div>
-                    <button
-                      onClick={() => {
-                        logout();
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left hover:bg-red-50 text-red-600"
-                    >
-                      <LogOut className="w-5 h-5" />
-                      <span className="font-medium">Logout</span>
-                    </button>
-                  </div>
-                ) : (
-                  <Link
-                    to="/login"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-blue-50 text-blue-600"
-                  >
-                    <User className="w-5 h-5" />
-                    <span className="font-medium">Login</span>
-                  </Link>
-                )}
-              </div>
             </div>
           </div>
         )}
