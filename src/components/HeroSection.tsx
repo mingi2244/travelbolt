@@ -29,11 +29,140 @@ export const HeroSection = () => {
         </div>
 
         {/* Heading */}
-        <h1 className="text-6xl md:text-8xl font-black text-white leading-[0.9] tracking-tight mb-8">
-          Journey <br /> Beyond <br />
-          <span className="bg-gradient-to-r from-blue-500 via-teal-400 to-green-500 bg-clip-text text-transparent animate-pulse">
-            Emotions
-          </span>
+        <h1 className="text-6xl md:text-8xl font-black text-white leading-[0.9] tracking-tight mb-8 relative">
+          <style jsx>{`
+            @keyframes slideInLeft {
+              0% {
+                opacity: 0;
+                transform: translateX(-100px) rotateY(-30deg);
+              }
+              100% {
+                opacity: 1;
+                transform: translateX(0) rotateY(0deg);
+              }
+            }
+            
+            @keyframes slideInRight {
+              0% {
+                opacity: 0;
+                transform: translateX(100px) rotateY(30deg);
+              }
+              100% {
+                opacity: 1;
+                transform: translateX(0) rotateY(0deg);
+              }
+            }
+            
+            @keyframes emotionsReveal {
+              0% {
+                opacity: 0;
+                transform: scale(0.5) rotateX(90deg);
+                filter: blur(20px);
+              }
+              50% {
+                opacity: 0.8;
+                transform: scale(1.1) rotateX(0deg);
+                filter: blur(5px);
+              }
+              100% {
+                opacity: 1;
+                transform: scale(1) rotateX(0deg);
+                filter: blur(0px);
+              }
+            }
+            
+            @keyframes textGlow {
+              0%, 100% {
+                text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+              }
+              50% {
+                text-shadow: 0 0 40px rgba(59, 130, 246, 0.8), 0 0 60px rgba(20, 184, 166, 0.6);
+              }
+            }
+            
+            @keyframes letterFloat {
+              0%, 100% {
+                transform: translateY(0px);
+              }
+              50% {
+                transform: translateY(-10px);
+              }
+            }
+            
+            .journey-word {
+              display: inline-block;
+              animation: slideInLeft 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+              opacity: 0;
+              animation-delay: 0.3s;
+            }
+            
+            .beyond-word {
+              display: inline-block;
+              animation: slideInRight 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+              opacity: 0;
+              animation-delay: 0.6s;
+            }
+            
+            .emotions-word {
+              display: inline-block;
+              animation: emotionsReveal 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards,
+                        textGlow 3s ease-in-out infinite,
+                        letterFloat 4s ease-in-out infinite;
+              opacity: 0;
+              animation-delay: 1.2s;
+              background: linear-gradient(45deg, #3b82f6, #14b8a6, #10b981, #06b6d4);
+              background-size: 300% 300%;
+              -webkit-background-clip: text;
+              background-clip: text;
+              -webkit-text-fill-color: transparent;
+              position: relative;
+            }
+            
+            .emotions-word::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background: linear-gradient(45deg, #3b82f6, #14b8a6, #10b981, #06b6d4);
+              background-size: 300% 300%;
+              animation: gradientShift 4s ease infinite;
+              -webkit-background-clip: text;
+              background-clip: text;
+              -webkit-text-fill-color: transparent;
+              z-index: -1;
+            }
+            
+            @keyframes gradientShift {
+              0% {
+                background-position: 0% 50%;
+              }
+              50% {
+                background-position: 100% 50%;
+              }
+              100% {
+                background-position: 0% 50%;
+              }
+            }
+            
+            .word-container {
+              perspective: 1000px;
+              transform-style: preserve-3d;
+            }
+          `}</style>
+          
+          <div className="word-container">
+            <span className="journey-word">Journey</span>
+          </div>
+          <br />
+          <div className="word-container">
+            <span className="beyond-word">Beyond</span>
+          </div>
+          <br />
+          <div className="word-container">
+            <span className="emotions-word">Emotions</span>
+          </div>
         </h1>
 
         {/* Description */}
