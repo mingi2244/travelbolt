@@ -154,7 +154,7 @@ export const DestinationCard = ({
           overflow: hidden;
           display: flex;
           flex-direction: column;
-          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           transform-style: preserve-3d;
           perspective: 1000px;
         }
@@ -183,7 +183,7 @@ export const DestinationCard = ({
           height: 100%;
           object-fit: cover;
           display: block;
-          transition: transform 0.4s ease;
+          transition: transform 0.2s ease;
         }
         .destination-card:hover .destination-img {
           transform: scale(1.05);
@@ -210,7 +210,7 @@ export const DestinationCard = ({
             0 4px 20px rgba(0, 0, 0, 0.3),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
           border: 1px solid rgba(255, 255, 255, 0.1);
-          transition: all 0.3s ease;
+          transition: all 0.15s ease;
         }
         .destination-card:hover .destination-badge {
           transform: scale(1.05);
@@ -224,7 +224,7 @@ export const DestinationCard = ({
           flex-direction: column;
           flex-grow: 1;
           justify-content: space-between;
-          background: rgba(255, 255, 255, 0.02);
+          background: rgba(255, 255, 255, 0.08);
           backdrop-filter: blur(5px);
           -webkit-backdrop-filter: blur(5px);
         }
@@ -232,12 +232,12 @@ export const DestinationCard = ({
         /* Title + Location block */
         .destination-title {
           font-size: 1.35rem;
-          font-weight: 1500;
+          font-weight: 700;
           margin: 0;
-          color: rgba(255, 255, 255, 0.95);
+          color: rgba(255, 255, 255, 1);
           letter-spacing: -0.01em;
           line-height: 1.2;
-          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
         }
         .destination-location {
           display: inline-flex;
@@ -245,30 +245,31 @@ export const DestinationCard = ({
           gap: 6px;
           font-size: 0.92rem;
           font-weight: 500;
-          color: rgba(255, 255, 255, 0.7);
+          color: rgba(255, 255, 255, 0.9);
           margin-top: 6px;   /* tight under title */
           margin-bottom: 10px; /* space above description */
+          text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
         }
         .destination-location svg {
           width: 16px;
           height: 16px;
           flex: 0 0 16px;
           vertical-align: middle;
-          filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+          filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.4));
         }
 
         /* Description */
         .destination-description {
           font-size: 0.96rem;
           line-height: 1.55;
-          color: rgba(255, 255, 255, 0.8);
+          color: rgba(255, 255, 255, 0.95);
           margin: 0 0 12px 0;
           flex-grow: 1;
           display: -webkit-box;
           -webkit-line-clamp: 3;
           -webkit-box-orient: vertical;
           overflow: hidden;
-          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+          text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
         }
 
         /* Content wrapper for consistent spacing */
@@ -290,9 +291,10 @@ export const DestinationCard = ({
           align-items: center;
           justify-content: space-between;
           font-size: 0.92rem;
-          color: rgba(255, 255, 255, 0.75);
+          color: rgba(255, 255, 255, 0.9);
           gap: 10px;
           margin-bottom: 16px;
+          text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
         .meta-left {
           display: inline-flex;
@@ -330,16 +332,17 @@ export const DestinationCard = ({
           font-size: 0.95rem;
           font-weight: 600;
           padding: 0.7rem;
-          transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          transition: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           min-height: 44px;
           background: rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
           border: 1px solid rgba(255, 255, 255, 0.2);
-          color: rgba(255, 255, 255, 0.9);
+          color: rgba(255, 255, 255, 1);
           box-shadow: 
             0 2px 8px rgba(0, 0, 0, 0.1),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
         .destination-btn:hover:not(:disabled) {
           transform: translateY(-2px) scale(1.02);
