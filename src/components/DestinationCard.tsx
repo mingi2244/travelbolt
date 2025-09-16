@@ -138,15 +138,10 @@ export const DestinationCard = ({
     <Card className="destination-card h-full">
       <style>{`
         .destination-card {
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-radius: 1.5rem;
-          box-shadow: 
-            0 8px 32px rgba(0, 0, 0, 0.12),
-            0 2px 16px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2);
-          border: 1px solid rgba(255, 255, 255, 0.18);
+          background: #fff;
+          border-radius: 1rem;
+          box-shadow: 0 6px 22px rgba(0,0,0,0.08);
+          border: 1px solid #ececec;
           width: 100%;
           height: 100%;
           font-family: 'Inter', Arial, sans-serif;
@@ -154,18 +149,11 @@ export const DestinationCard = ({
           overflow: hidden;
           display: flex;
           flex-direction: column;
-          transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-          transform-style: preserve-3d;
-          perspective: 1000px;
+          transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
         .destination-card:hover {
-          transform: translateY(-12px) rotateX(5deg) rotateY(-2deg);
-          box-shadow: 
-            0 20px 60px rgba(0, 0, 0, 0.25),
-            0 8px 32px rgba(0, 0, 0, 0.15),
-            inset 0 1px 0 rgba(255, 255, 255, 0.3);
-          background: rgba(255, 255, 255, 0.15);
-          border: 1px solid rgba(255, 255, 255, 0.25);
+          box-shadow: 0px 10px 28px rgba(0,0,0,0.6);
+          transform: translateY(-6px);
         }
 
         /* Image */
@@ -174,19 +162,14 @@ export const DestinationCard = ({
           height: 200px;
           width: 100%;
           overflow: hidden;
-          background: rgba(255, 255, 255, 0.05);
+          background: #f2f4f7;
           flex-shrink: 0;
-          border-radius: 1.5rem 1.5rem 0 0;
         }
         .destination-img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           display: block;
-          transition: transform 0.2s ease;
-        }
-        .destination-card:hover .destination-img {
-          transform: scale(1.05);
         }
 
         /* Top-right match pill */
@@ -194,9 +177,7 @@ export const DestinationCard = ({
           position: absolute;
           top: 12px;
           right: 12px;
-          background: rgba(0, 0, 0, 0.7);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
+          background: #1f1f1f;
           color: #fff;
           font-weight: 700;
           border-radius: 999px;
@@ -206,15 +187,7 @@ export const DestinationCard = ({
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          box-shadow: 
-            0 4px 20px rgba(0, 0, 0, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          transition: all 0.15s ease;
-        }
-        .destination-card:hover .destination-badge {
-          transform: scale(1.05);
-          background: rgba(0, 0, 0, 0.8);
+          box-shadow: 0 6px 14px rgba(0,0,0,0.2);
         }
 
         /* Body */
@@ -224,20 +197,16 @@ export const DestinationCard = ({
           flex-direction: column;
           flex-grow: 1;
           justify-content: space-between;
-          background: rgba(255, 255, 255, 0.08);
-          backdrop-filter: blur(5px);
-          -webkit-backdrop-filter: blur(5px);
         }
 
         /* Title + Location block */
         .destination-title {
           font-size: 1.35rem;
-          font-weight: 700;
+          font-weight: 1500;
           margin: 0;
-          color: rgba(255, 255, 255, 1);
+          color: #101828;
           letter-spacing: -0.01em;
           line-height: 1.2;
-          text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
         }
         .destination-location {
           display: inline-flex;
@@ -245,31 +214,28 @@ export const DestinationCard = ({
           gap: 6px;
           font-size: 0.92rem;
           font-weight: 500;
-          color: rgba(255, 255, 255, 0.9);
+          color: #6b7280; /* muted gray */
           margin-top: 6px;   /* tight under title */
           margin-bottom: 10px; /* space above description */
-          text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
         }
         .destination-location svg {
           width: 16px;
           height: 16px;
           flex: 0 0 16px;
           vertical-align: middle;
-          filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.4));
         }
 
         /* Description */
         .destination-description {
           font-size: 0.96rem;
           line-height: 1.55;
-          color: rgba(255, 255, 255, 0.95);
+          color: #303030;
           margin: 0 0 12px 0;
           flex-grow: 1;
           display: -webkit-box;
           -webkit-line-clamp: 3;
           -webkit-box-orient: vertical;
           overflow: hidden;
-          text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
         }
 
         /* Content wrapper for consistent spacing */
@@ -291,10 +257,9 @@ export const DestinationCard = ({
           align-items: center;
           justify-content: space-between;
           font-size: 0.92rem;
-          color: rgba(255, 255, 255, 0.9);
+          color: #475d69;
           gap: 10px;
           margin-bottom: 16px;
-          text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
         .meta-left {
           display: inline-flex;
@@ -318,7 +283,6 @@ export const DestinationCard = ({
           height: 10px;
           border-radius: 999px;
           display: inline-block;
-          box-shadow: 0 0 8px currentColor;
         }
 
         /* Buttons */
@@ -328,35 +292,19 @@ export const DestinationCard = ({
         }
         .destination-btn {
           flex: 1;
-          border-radius: 1rem;
+          border-radius: 0.8rem;
           font-size: 0.95rem;
           font-weight: 600;
           padding: 0.7rem;
-          transition: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          transition: transform 0.15s ease;
           min-height: 44px;
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          color: rgba(255, 255, 255, 1);
-          box-shadow: 
-            0 2px 8px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
-          text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
         .destination-btn:hover:not(:disabled) {
-          transform: translateY(-2px) scale(1.02);
-          background: rgba(255, 255, 255, 0.15);
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          box-shadow: 
-            0 4px 16px rgba(0, 0, 0, 0.15),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2);
-          color: rgba(255, 255, 255, 1);
+          transform: translateY(-1px);
         }
         .destination-btn:disabled {
           opacity: 0.6;
           cursor: not-allowed;
-          background: rgba(255, 255, 255, 0.05);
         }
       `}</style>
 
@@ -430,7 +378,7 @@ export const DestinationCard = ({
             )}
 
             <Button
-              className="destination-btn" 
+              className="destination-btn"
               onClick={handleAddToPlan}
               disabled={isSelected}
             >
@@ -451,5 +399,4 @@ export const DestinationCard = ({
       </div>
     </Card>
   );
-};  
-    
+};
