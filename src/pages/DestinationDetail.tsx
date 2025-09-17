@@ -1,6 +1,3 @@
-I'll redesign your destination details page to make it more visually appealing while keeping the same colors and highlighting every step of the journey process. Here's the enhanced version:
-
-```tsx
 import { useEffect, useMemo } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ParticleBackground } from "@/components/ParticleBackground";
@@ -328,4 +325,223 @@ const DestinationDetail = () => {
                             isCompleted ? 'bg-green-500 text-white' :
                             isCurrent ? 'bg-amber-500 text-white animate-pulse' :
                             'bg-gray-300 text-gray-600'
-                          }`
+                          }`}>
+                            {index + 1}
+                          </div>
+                          
+                          {/* Step Content */}
+                          <div className="space-y-3">
+                            <div className="flex items-center gap-3">
+                              <div className={`p-2 rounded-lg ${
+                                isCompleted ? 'bg-green-100 text-green-600' :
+                                isCurrent ? 'bg-amber-100 text-amber-600' :
+                                'bg-gray-100 text-gray-400'
+                              }`}>
+                                <Icon className="w-5 h-5" />
+                              </div>
+                              <h3 className="font-semibold text-lg">{step.title}</h3>
+                            </div>
+                            
+                            <p className="text-sm text-muted-foreground leading-relaxed">
+                              {step.description}
+                            </p>
+                            
+                            {/* Tips */}
+                            <div className="space-y-1">
+                              {step.tips.map((tip, tipIndex) => (
+                                <div key={tipIndex} className="flex items-center gap-2 text-xs text-muted-foreground">
+                                  <div className="w-1 h-1 bg-current rounded-full opacity-60" />
+                                  <span>{tip}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  
+                  {/* Action Buttons */}
+                  <div className="flex gap-4 mt-8 justify-center">
+                    {currentPlan.status === 'selected' && (
+                      <Button onClick={handleStartJourney} className="px-8 py-3 text-lg">
+                        <Navigation className="w-5 h-5 mr-2" />
+                        Start Journey
+                      </Button>
+                    )}
+                    {currentPlan.status === 'ongoing' && (
+                      <Button onClick={handleCompleteJourney} className="px-8 py-3 text-lg bg-green-600 hover:bg-green-700">
+                        <CheckCircle className="w-5 h-5 mr-2" />
+                        Complete Journey
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Description */}
+              <Card>
+                <CardContent className="p-8">
+                  <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Info className="w-6 h-6 text-primary" />
+                    </div>
+                    About {destination.name}
+                  </h2>
+                  <p className="text-lg leading-relaxed text-muted-foreground mb-6">
+                    {destination.description}
+                  </p>
+                  
+                  {/* Emotional Match */}
+                  <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-6 border border-primary/20">
+                    <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
+                      <Heart className="w-5 h-5 text-primary" />
+                      Emotional Connection
+                    </h3>
+                    <p className="text-muted-foreground mb-4">{destination.emotionalMatch}</p>
+                    <div className="flex items-center gap-3">
+                      <Progress value={destination.matchPercentage} className="flex-1 h-3" />
+                      <Badge className="bg-primary/20 text-primary border-primary/30 px-3 py-1">
+                        {destination.matchPercentage}% Match
+                      </Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Cultural Highlights */}
+              <Card>
+                <CardContent className="p-8">
+                  <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Sparkles className="w-6 h-6 text-primary" />
+                    </div>
+                    Cultural Highlights
+                  </h2>
+                  <div className="grid gap-4">
+                    {destination.culturalHighlights.map((highlight, index) => (
+                      <div key={index} className="flex items-start gap-4 p-4 bg-muted/50 rounded-lg border">
+                        <div className="text-2xl">{getCategoryIcon(highlight.category)}</div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-lg mb-2">{highlight.name}</h3>
+                          <p className="text-muted-foreground leading-relaxed">{highlight.description}</p>
+                          <Badge className="mt-3 capitalize bg-primary/10 text-primary border-primary/30">
+                            {highlight.category}
+                          </Badge>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Quick Info */}
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-bold mb-6">Quick Info</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <Clock className="w-4 h-4 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Best Time</p>
+                        <p className="font-semibold">{destination.bestTime}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <Shield className="w-4 h-4 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Safety Level</p>
+                        <p className="font-semibold capitalize">{destination.safetyLevel}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <DollarSign className="w-4 h-4 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Budget Range</p>
+                        <p className="font-semibold">{destination.priceRange}</p>
+                        <p className="text-xs text-muted-foreground">{rentText}</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Action Card */}
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-bold mb-4">Plan Your Visit</h3>
+                  {!currentPlan ? (
+                    <Button onClick={handleAdd} className="w-full py-3 text-lg">
+                      <Heart className="w-5 h-5 mr-2" />
+                      Add to Travel Plans
+                    </Button>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="text-center p-4 bg-primary/10 rounded-lg border border-primary/20">
+                        <CheckCircle className="w-8 h-8 text-primary mx-auto mb-2" />
+                        <p className="font-semibold text-primary">Added to Plans!</p>
+                        <p className="text-sm text-muted-foreground">
+                          Status: <span className="capitalize font-medium">{currentPlan.status}</span>
+                        </p>
+                      </div>
+                      <Button 
+                        onClick={() => navigate('/dashboard')} 
+                        variant="outline" 
+                        className="w-full"
+                      >
+                        View in Dashboard
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Travel Tips */}
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                    <Lightbulb className="w-5 h-5 text-primary" />
+                    Travel Tips
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="p-3 bg-muted/50 rounded-lg">
+                      <p className="text-sm font-medium mb-1">Local Currency</p>
+                      <p className="text-xs text-muted-foreground">Indian Rupee (₹)</p>
+                    </div>
+                    <div className="p-3 bg-muted/50 rounded-lg">
+                      <p className="text-sm font-medium mb-1">Language</p>
+                      <p className="text-xs text-muted-foreground">Hindi, English, Local dialects</p>
+                    </div>
+                    <div className="p-3 bg-muted/50 rounded-lg">
+                      <p className="text-sm font-medium mb-1">Transportation</p>
+                      <p className="text-xs text-muted-foreground">Trains, buses, taxis available</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default DestinationDetail;
