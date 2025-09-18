@@ -1,10 +1,13 @@
-import { useEffect, useMemo } from "react";
+I'll fix the journey progression logic to show one step at a time with detailed information. Here's the updated component:
+
+```tsx
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ParticleBackground } from "@/components/ParticleBackground";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Clock, Heart, Users, Shield, BedDouble, Camera, Utensils, Activity, Navigation, Lightbulb, CheckCircle, Circle, ArrowRight, Star, Calendar, DollarSign, Info, Sparkles, TrendingUp, Map } from "lucide-react";
+import { MapPin, Clock, Heart, Users, Shield, BedDouble, Camera, Utensils, Activity, Navigation, Lightbulb, CheckCircle, Circle, ArrowRight, Star, Calendar, DollarSign, Info, Sparkles, TrendingUp, Map, ChevronRight, AlertCircle } from "lucide-react";
 import { usePlans } from "@/contexts/PlanContext";
 import { useToast } from "@/hooks/use-toast";
 import { bangaloreDestinations, keralaDestinations, tamilNaduDestinations, type Destination } from "@/data/destinations";
@@ -23,8 +26,9 @@ const DestinationDetail = () => {
   const decodedName = decodeURIComponent(name);
   const location = useLocation() as { state?: { destination?: Destination } };
   const navigate = useNavigate();
-  const { addPlan, selectedPlans, updatePlanStatus } = usePlans();
+  const { addPlan, selectedPlans, updatePlanStatus, updatePlanProgress } = usePlans();
   const { toast } = useToast();
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   const destination = useMemo(() => {
     return (
@@ -38,6 +42,13 @@ const DestinationDetail = () => {
   const currentPlan = selectedPlans.find(
     (p) => p.name === destination?.name && p.region === destination?.country
   );
+
+  // Sync current step with plan progress
+  useEffect(() => {
+    if (currentPlan?.currentStep !== undefined) {
+      setCurrentStepIndex(currentPlan.currentStep);
+    }
+  }, [currentPlan]);
 
   // Scroll to top when component mounts or destination changes
   useEffect(() => {
@@ -98,59 +109,97 @@ const DestinationDetail = () => {
       title: 'Research & Planning', 
       description: 'Gather information about the destination, weather, and local customs',
       icon: Map,
-      tips: ['Check weather forecasts', 'Learn basic local phrases', 'Research cultural etiquette']
+      tips: ['Check weather forecasts', 'Learn basic local phrases', 'Research cultural etiquette'],
+      detailedSteps: [
+        'Research the best time to visit based on weather and festivals',
+        'Learn about local customs and dress codes',
+        'Make a list of must-visit places and attractions',
+        'Check visa requirements and travel advisories',
+        'Read reviews from other travelers'
+      ],
+      estimatedTime: '2-3 days'
     },
     { 
       id: 'booking', 
       title: 'Accommodation & Transport', 
       description: 'Book hotels, flights, and local transportation',
       icon: Calendar,
-      tips: ['Compare prices across platforms', 'Book refundable options', 'Save confirmation emails']
+      tips: ['Compare prices across platforms', 'Book refundable options', 'Save confirmation emails'],
+      detailedSteps: [
+        'Compare flight/train/bus options and book tickets',
+        'Research and book accommodation in safe areas',
+        'Arrange airport/station transfers',
+        'Book any guided tours or activities in advance',
+        'Consider travel insurance options'
+      ],
+      estimatedTime: '1-2 days'
     },
     { 
       id: 'preparation', 
       title: 'Travel Preparation', 
       description: 'Pack essentials, check documents, and prepare for the journey',
       icon: Sparkles,
-      tips: ['Create packing checklist', 'Check passport validity', 'Get travel insurance']
+      tips: ['Create packing checklist', 'Check passport validity', 'Get travel insurance'],
+      detailedSteps: [
+        'Create a packing list based on weather and activities',
+        'Check passport/ID validity (6 months for international)',
+        'Make copies of important documents',
+        'Prepare first-aid kit and medications',
+        'Download offline maps and translation apps'
+      ],
+      estimatedTime: '1-2 days'
     },
     { 
       id: 'arrival', 
       title: 'Arrival & Check-in', 
       description: 'Reach destination, check into accommodation, and get oriented',
       icon: MapPin,
-      tips: ['Keep hotel address handy', 'Exchange currency', 'Get local SIM/WiFi']
+      tips: ['Keep hotel address handy', 'Exchange currency', 'Get local SIM/WiFi'],
+      detailedSteps: [
+        'Clear immigration/security (if applicable)',
+        'Collect luggage and arrange transportation',
+        'Check into your accommodation',
+        'Get local SIM card or activate roaming',
+        'Familiarize yourself with the neighborhood'
+      ],
+      estimatedTime: '3-4 hours'
     },
     { 
       id: 'exploration', 
       title: 'Explore & Experience', 
       description: 'Visit attractions, try local cuisine, and immerse in culture',
       icon: Camera,
-      tips: ['Start early to avoid crowds', 'Try street food', 'Interact with locals']
+      tips: ['Start early to avoid crowds', 'Try street food', 'Interact with locals'],
+      detailedSteps: [
+        'Visit major attractions and landmarks',
+        'Try local cuisine and street food',
+        'Shop for souvenirs and local crafts',
+        'Take photos and create memories',
+        'Engage with local culture and traditions'
+      ],
+      estimatedTime: 'Duration of stay'
     },
     { 
       id: 'completion', 
       title: 'Journey Complete', 
       description: 'Reflect on experiences and share memories',
       icon: Star,
-      tips: ['Write travel journal', 'Share photos with friends', 'Leave reviews']
+      tips: ['Write travel journal', 'Share photos with friends', 'Leave reviews'],
+      detailedSteps: [
+        'Organize and backup photos/videos',
+        'Write about your experiences in a journal',
+        'Leave reviews for hotels and attractions',
+        'Share experiences on social media',
+        'Plan your next adventure!'
+      ],
+      estimatedTime: '1-2 hours'
     }
   ];
 
   const getStepProgress = () => {
     if (!currentPlan) return 0;
-    if (currentPlan.status === 'selected') return 0;
-    if (currentPlan.status === 'ongoing') return 50;
-    if (currentPlan.status === 'completed') return 100;
-    return 0;
-  };
-
-  const getCurrentStepIndex = () => {
-    if (!currentPlan) return -1;
-    if (currentPlan.status === 'selected') return 0;
-    if (currentPlan.status === 'ongoing') return 4;
-    if (currentPlan.status === 'completed') return 6;
-    return -1;
+    const progress = ((currentPlan.currentStep || 0) / travelSteps.length) * 100;
+    return Math.round(progress);
   };
 
   const handleAdd = () => {
@@ -170,6 +219,7 @@ const DestinationDetail = () => {
       bestTime: destination.bestTime,
       priceRange: destination.priceRange,
       region: destination.country as 'Tamil Nadu' | 'Kerala' | 'Bangalore',
+      currentStep: 0
     });
     toast({ title: "Added to plans!", description: `${destination.name} has been added to your travel dashboard.` });
   };
@@ -177,13 +227,31 @@ const DestinationDetail = () => {
   const handleStartJourney = () => {
     if (currentPlan) {
       updatePlanStatus(currentPlan.id, 'ongoing');
-      toast({ title: "Journey started!", description: `Your journey to ${destination.name} is now ongoing.` });
+      if (updatePlanProgress) {
+        updatePlanProgress(currentPlan.id, 0);
+      }
+      setCurrentStepIndex(0);
+      toast({ title: "Journey started!", description: `Let's begin with ${travelSteps[0].title}` });
+    }
+  };
+
+  const handleNextStep = () => {
+    if (currentPlan && currentStepIndex < travelSteps.length - 1) {
+      const nextIndex = currentStepIndex + 1;
+      setCurrentStepIndex(nextIndex);
+      if (updatePlanProgress) {
+        updatePlanProgress(currentPlan.id, nextIndex);
+      }
+      toast({ title: "Step completed!", description: `Moving to: ${travelSteps[nextIndex].title}` });
     }
   };
 
   const handleCompleteJourney = () => {
     if (currentPlan) {
       updatePlanStatus(currentPlan.id, 'completed');
+      if (updatePlanProgress) {
+        updatePlanProgress(currentPlan.id, travelSteps.length);
+      }
       toast({ title: "Journey completed!", description: `Congratulations on completing your journey to ${destination.name}!` });
     }
   };
@@ -284,264 +352,4 @@ const DestinationDetail = () => {
                     </div>
                     <Badge className={`px-4 py-2 text-sm font-semibold ${
                       currentPlan.status === 'selected' ? 'bg-blue-500/20 text-blue-600 border-blue-500/30' :
-                      currentPlan.status === 'ongoing' ? 'bg-amber-500/20 text-amber-600 border-amber-500/30' :
-                      'bg-green-500/20 text-green-600 border-green-500/30'
-                    }`}>
-                      {currentPlan.status === 'selected' ? 'Planning Phase' :
-                       currentPlan.status === 'ongoing' ? 'Journey in Progress' :
-                       'Journey Completed'}
-                    </Badge>
-                  </div>
-                  
-                  {/* Progress Bar */}
-                  <div className="mb-8">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium">Overall Progress</span>
-                      <span className="text-sm font-medium">{getStepProgress()}%</span>
-                    </div>
-                    <Progress value={getStepProgress()} className="h-3" />
-                  </div>
-                  
-                  {/* Steps Grid */}
-                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {travelSteps.map((step, index) => {
-                      const currentStepIndex = getCurrentStepIndex();
-                      const isCompleted = currentPlan.status === 'completed' || index < currentStepIndex;
-                      const isCurrent = index === currentStepIndex;
-                      const isUpcoming = index > currentStepIndex;
-                      const Icon = step.icon;
-                      
-                      return (
-                        <div
-                          key={step.id}
-                          className={`relative p-6 rounded-xl border-2 transition-all duration-300 ${
-                            isCompleted ? 'bg-green-50/50 border-green-500/30 shadow-lg shadow-green-500/10' :
-                            isCurrent ? 'bg-amber-50/50 border-amber-500/30 shadow-lg shadow-amber-500/10 scale-105' :
-                            'bg-gray-50/50 border-gray-200 opacity-60'
-                          }`}
-                        >
-                          {/* Step Number Badge */}
-                          <div className={`absolute -top-3 -right-3 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                            isCompleted ? 'bg-green-500 text-white' :
-                            isCurrent ? 'bg-amber-500 text-white animate-pulse' :
-                            'bg-gray-300 text-gray-600'
-                          }`}>
-                            {index + 1}
-                          </div>
-                          
-                          {/* Step Content */}
-                          <div className="space-y-3">
-                            <div className="flex items-center gap-3">
-                              <div className={`p-2 rounded-lg ${
-                                isCompleted ? 'bg-green-100 text-green-600' :
-                                isCurrent ? 'bg-amber-100 text-amber-600' :
-                                'bg-gray-100 text-gray-400'
-                              }`}>
-                                <Icon className="w-5 h-5" />
-                              </div>
-                              <h3 className="font-semibold text-lg">{step.title}</h3>
-                            </div>
-                            
-                            <p className="text-sm text-muted-foreground leading-relaxed">
-                              {step.description}
-                            </p>
-                            
-                            {/* Tips */}
-                            <div className="space-y-1">
-                              {step.tips.map((tip, tipIndex) => (
-                                <div key={tipIndex} className="flex items-center gap-2 text-xs text-muted-foreground">
-                                  <div className="w-1 h-1 bg-current rounded-full opacity-60" />
-                                  <span>{tip}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  
-                  {/* Action Buttons */}
-                  <div className="flex gap-4 mt-8 justify-center">
-                    {currentPlan.status === 'selected' && (
-                      <Button onClick={handleStartJourney} className="px-8 py-3 text-lg">
-                        <Navigation className="w-5 h-5 mr-2" />
-                        Start Journey
-                      </Button>
-                    )}
-                    {currentPlan.status === 'ongoing' && (
-                      <Button onClick={handleCompleteJourney} className="px-8 py-3 text-lg bg-green-600 hover:bg-green-700">
-                        <CheckCircle className="w-5 h-5 mr-2" />
-                        Complete Journey
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* Main Content */}
-            <div className="lg:col-span-2 space-y-8">
-              {/* Description */}
-              <Card>
-                <CardContent className="p-8">
-                  <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Info className="w-6 h-6 text-primary" />
-                    </div>
-                    About {destination.name}
-                  </h2>
-                  <p className="text-lg leading-relaxed text-muted-foreground mb-6">
-                    {destination.description}
-                  </p>
-                  
-                  {/* Emotional Match */}
-                  <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-6 border border-primary/20">
-                    <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
-                      <Heart className="w-5 h-5 text-primary" />
-                      Emotional Connection
-                    </h3>
-                    <p className="text-muted-foreground mb-4">{destination.emotionalMatch}</p>
-                    <div className="flex items-center gap-3">
-                      <Progress value={destination.matchPercentage} className="flex-1 h-3" />
-                      <Badge className="bg-primary/20 text-primary border-primary/30 px-3 py-1">
-                        {destination.matchPercentage}% Match
-                      </Badge>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Cultural Highlights */}
-              <Card>
-                <CardContent className="p-8">
-                  <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Sparkles className="w-6 h-6 text-primary" />
-                    </div>
-                    Cultural Highlights
-                  </h2>
-                  <div className="grid gap-4">
-                    {destination.culturalHighlights.map((highlight, index) => (
-                      <div key={index} className="flex items-start gap-4 p-4 bg-muted/50 rounded-lg border">
-                        <div className="text-2xl">{getCategoryIcon(highlight.category)}</div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-lg mb-2">{highlight.name}</h3>
-                          <p className="text-muted-foreground leading-relaxed">{highlight.description}</p>
-                          <Badge className="mt-3 capitalize bg-primary/10 text-primary border-primary/30">
-                            {highlight.category}
-                          </Badge>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Sidebar */}
-            <div className="space-y-6">
-              {/* Quick Info */}
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-6">Quick Info</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <Clock className="w-4 h-4 text-primary" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Best Time</p>
-                        <p className="font-semibold">{destination.bestTime}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <Shield className="w-4 h-4 text-primary" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Safety Level</p>
-                        <p className="font-semibold capitalize">{destination.safetyLevel}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <DollarSign className="w-4 h-4 text-primary" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Budget Range</p>
-                        <p className="font-semibold">{destination.priceRange}</p>
-                        <p className="text-xs text-muted-foreground">{rentText}</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Action Card */}
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-4">Plan Your Visit</h3>
-                  {!currentPlan ? (
-                    <Button onClick={handleAdd} className="w-full py-3 text-lg">
-                      <Heart className="w-5 h-5 mr-2" />
-                      Add to Travel Plans
-                    </Button>
-                  ) : (
-                    <div className="space-y-4">
-                      <div className="text-center p-4 bg-primary/10 rounded-lg border border-primary/20">
-                        <CheckCircle className="w-8 h-8 text-primary mx-auto mb-2" />
-                        <p className="font-semibold text-primary">Added to Plans!</p>
-                        <p className="text-sm text-muted-foreground">
-                          Status: <span className="capitalize font-medium">{currentPlan.status}</span>
-                        </p>
-                      </div>
-                      <Button 
-                        onClick={() => navigate('/dashboard')} 
-                        variant="outline" 
-                        className="w-full"
-                      >
-                        View in Dashboard
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Travel Tips */}
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    <Lightbulb className="w-5 h-5 text-primary" />
-                    Travel Tips
-                  </h3>
-                  <div className="space-y-3">
-                    <div className="p-3 bg-muted/50 rounded-lg">
-                      <p className="text-sm font-medium mb-1">Local Currency</p>
-                      <p className="text-xs text-muted-foreground">Indian Rupee (₹)</p>
-                    </div>
-                    <div className="p-3 bg-muted/50 rounded-lg">
-                      <p className="text-sm font-medium mb-1">Language</p>
-                      <p className="text-xs text-muted-foreground">Hindi, English, Local dialects</p>
-                    </div>
-                    <div className="p-3 bg-muted/50 rounded-lg">
-                      <p className="text-sm font-medium mb-1">Transportation</p>
-                      <p className="text-xs text-muted-foreground">Trains, buses, taxis available</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-};
-
-export default DestinationDetail;
+                      currentPlan
